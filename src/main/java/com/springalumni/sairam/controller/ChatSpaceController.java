@@ -5,7 +5,6 @@ import com.springalumni.sairam.dto.DomainDTO;
 import com.springalumni.sairam.dto.PostDTO;
 import com.springalumni.sairam.dto.RepliesDTO;
 import com.springalumni.sairam.models.Domain;
-import com.springalumni.sairam.models.Posts;
 import com.springalumni.sairam.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

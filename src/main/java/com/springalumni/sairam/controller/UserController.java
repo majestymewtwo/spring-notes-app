@@ -17,12 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @PostMapping("/newUser")
-    public UserDTO addUser(@RequestBody User user){
-        return userService.addNewUser(user);
-    }
     @GetMapping("/getAllStudents")
     public List<UserDTO> getAllStudents() {
         return userService.getAllStudents();
+    }
+    @GetMapping("/getAllAlumni")
+    public List<UserDTO> getAllAlumni() {
+        return userService.getAllAlumni();
     }
 }
