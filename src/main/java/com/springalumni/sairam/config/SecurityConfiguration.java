@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter  jwtAuthFilter;
+    @Profile("prod")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
         return http
@@ -29,6 +30,23 @@ public class SecurityConfiguration {
                                 .requestMatchers(("/api/auth/**")).permitAll()
                                 .requestMatchers(("/api/chats/**")).hasAnyRole("STUDENT", "ALUMNI")
                                 .anyRequest().authenticated()
+                )
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
+    @Profile("dev")
+    @Bean
+    public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws  Exception {
+        return http
+                .csrf()
+                .disable()
+                .authorizeHttpRequests(authorizedRequests ->
+                        authorizedRequests
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

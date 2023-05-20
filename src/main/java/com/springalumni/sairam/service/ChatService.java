@@ -9,6 +9,8 @@ import com.springalumni.sairam.mapper.*;
 import com.springalumni.sairam.models.*;
 import com.springalumni.sairam.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +36,9 @@ public class ChatService {
     public Domain createDomain(Domain newDomain) {
         return domainRepository.save(newDomain);
     }
-    public List<DomainDTO> getAllDomains() {
-        List<Domain> domains = domainRepository.findAll();
-        return domains.stream().map(domainMapper::mapToDTO).toList();
+    public Page<DomainDTO> getAllDomains(int pageNo, int pageSize) {
+        Page<Domain> domains = domainRepository.findAll(PageRequest.of(pageNo, pageSize));
+        return domains.map(domainMapper::mapToDTO);
     }
     public ChatDTO createNewChat(ChatDTO chatDTO){
         Domain domain = domainRepository.findById(chatDTO.getDomain().getId())

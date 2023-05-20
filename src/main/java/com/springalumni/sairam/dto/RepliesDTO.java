@@ -16,5 +16,6 @@ public class RepliesDTO {
     private String content;
     private BigDecimal upVotes;
     private BigDecimal downVotes;
+    private RepliesDTO replies;
     private UserDTO user;
 }

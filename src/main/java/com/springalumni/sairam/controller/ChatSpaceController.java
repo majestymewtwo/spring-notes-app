@@ -7,6 +7,7 @@ import com.springalumni.sairam.dto.RepliesDTO;
 import com.springalumni.sairam.models.Domain;
 import com.springalumni.sairam.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,11 @@ public class ChatSpaceController {
         return chatService.createDomain(newDomain);
     }
     @GetMapping("/allDomains")
-    public List<DomainDTO> getDomains() {
-        return chatService.getAllDomains();
+    public Page<DomainDTO> getDomains(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "100") int pageSize
+    ) {
+        return chatService.getAllDomains(pageNo, pageSize);
     }
     @PostMapping("/newChat")
     public ChatDTO newChat(@RequestBody ChatDTO chatDTO){

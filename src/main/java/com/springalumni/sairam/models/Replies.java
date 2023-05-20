@@ -21,6 +21,8 @@ public class Replies {
     @DBRef
     private Posts posts;
     @DBRef
+    private Replies replies;
+    @DBRef
     private User user;
     private Set<String> upVotedUsers;
     private Set<String> downVotedUsers;
