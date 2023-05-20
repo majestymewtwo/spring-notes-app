@@ -6,14 +6,12 @@ import com.springalumni.sairam.dto.RegisterDTO;
 import com.springalumni.sairam.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AuthController {
     private final AuthenticationService service;
     @PostMapping("/register")
@@ -27,5 +25,11 @@ public class AuthController {
             @RequestBody LoginDTO request
     ) throws Exception {
         return ResponseEntity.ok(service.authenticate(request));
+    }
+    @PostMapping("/authenticate/google")
+    public ResponseEntity<AuthDTO> googleAuthenticate(
+            @RequestParam String token
+    ) throws Exception {
+        return ResponseEntity.ok(service.verifyOauthToken(token));
     }
 }
