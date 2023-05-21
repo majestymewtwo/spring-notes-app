@@ -1,6 +1,7 @@
 package com.springalumni.sairam.service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.springalumni.sairam.dto.AuthDTO;
 import com.springalumni.sairam.dto.LoginDTO;
 import com.springalumni.sairam.dto.RegisterDTO;
@@ -72,20 +73,21 @@ public class AuthenticationService {
         HttpURLConnection connection = (HttpURLConnection) googleVerifyUrl.openConnection();
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
-        if(responseCode == 200){
+        if (responseCode == 200) {
             UserDTO userDTO = new UserDTO();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line;
             StringBuilder response = new StringBuilder();
-            while((line = reader.readLine()) != null){
+            String line;
+            while ((line = reader.readLine()) != null) {
                 response.append(line);
             }
             reader.close();
-            JSONObject jsonObject = new JSONObject(response.toString());
-            userDTO.setEmail(jsonObject.getString("email"));
-            userDTO.setFirstName(jsonObject.getString("given_name"));
-            userDTO.setLastName(jsonObject.getString("family_name"));
-            userDTO.setProfilePic(jsonObject.getString("picture"));
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson(response.toString(), JsonObject.class);
+            userDTO.setEmail(jsonObject.get("email").getAsString());
+            userDTO.setFirstName(jsonObject.get("given_name").getAsString());
+            userDTO.setLastName(jsonObject.get("family_name").getAsString());
+            userDTO.setProfilePic(jsonObject.get("picture").getAsString());
             userDTO.setRole(Role.ROLE_STUDENT);
             User user = userMapper.mapToEntity(userService.saveUser(userDTO));
             var jwtToken = jwtService.generateToken(user);
@@ -95,4 +97,5 @@ public class AuthenticationService {
         }
         return null;
     }
+
 }
