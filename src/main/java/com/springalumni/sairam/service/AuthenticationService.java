@@ -5,11 +5,14 @@ import com.springalumni.sairam.dto.AuthDTO;
 import com.springalumni.sairam.dto.LoginDTO;
 import com.springalumni.sairam.dto.RegisterDTO;
 import com.springalumni.sairam.dto.UserDTO;
+import com.springalumni.sairam.exception.ApiException;
+import com.springalumni.sairam.mapper.UserMapper;
 import com.springalumni.sairam.models.Role;
 import com.springalumni.sairam.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import com.springalumni.sairam.models.User;
@@ -32,7 +35,11 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final UserMapper userMapper;
     public AuthDTO register(RegisterDTO request) throws Exception {
+        if(repository.findByEmail(request.getEmail()).isPresent()){
+            throw new ApiException("Email already exits", HttpStatus.UNAUTHORIZED);
+        }
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -80,7 +87,7 @@ public class AuthenticationService {
             userDTO.setLastName(jsonObject.getString("family_name"));
             userDTO.setProfilePic(jsonObject.getString("picture"));
             userDTO.setRole(Role.ROLE_STUDENT);
-            User user = userService.saveUser(userDTO);
+            User user = userMapper.mapToEntity(userService.saveUser(userDTO));
             var jwtToken = jwtService.generateToken(user);
             return AuthDTO.builder()
                     .token(jwtToken)

@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class AuthController {
     private final AuthenticationService service;
+    @GetMapping
+    public String test() {
+        return "This works";
+    }
     @PostMapping("/register")
     public ResponseEntity<AuthDTO> register(
             @RequestBody RegisterDTO request

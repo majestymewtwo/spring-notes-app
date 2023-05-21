@@ -28,7 +28,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizedRequests ->
                         authorizedRequests
                                 .requestMatchers(("/api/auth/**")).permitAll()
-                                .requestMatchers(("/api/chats/**")).hasAnyRole("STUDENT", "ALUMNI")
+                                .requestMatchers(("/api/user/**")).hasAnyRole("STUDENT", "ALUMNI")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement()
