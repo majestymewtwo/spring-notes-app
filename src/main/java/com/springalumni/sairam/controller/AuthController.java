@@ -4,6 +4,7 @@ import com.springalumni.sairam.dto.AuthDTO;
 import com.springalumni.sairam.dto.LoginDTO;
 import com.springalumni.sairam.dto.RegisterDTO;
 import com.springalumni.sairam.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @CrossOrigin
+@Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationService service;
     @GetMapping
