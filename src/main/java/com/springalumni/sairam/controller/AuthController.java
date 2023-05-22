@@ -6,6 +6,8 @@ import com.springalumni.sairam.dto.RegisterDTO;
 import com.springalumni.sairam.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,12 @@ public class AuthController {
     @GetMapping
     public String test() {
         return "This works";
+    }
+    @GetMapping("/test")
+    public String jsonTest() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("status", "working");
+        return obj.toString();
     }
     @PostMapping("/register")
     public ResponseEntity<AuthDTO> register(
